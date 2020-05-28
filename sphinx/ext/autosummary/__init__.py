@@ -252,7 +252,9 @@ class Autosummary(SphinxDirective):
             excluded = Matcher(self.config.exclude_patterns)
             for name, sig, summary, real_name in items:
                 docname = posixpath.join(tree_prefix, real_name)
-                docname = posixpath.normpath(posixpath.join(dirname, docname))
+                docname, _ = self.env.relfn2path(docname)
+                docname = docname.replace(os.sep, posixpath.sep)
+                docname = posixpath.normpath(docname)
                 if docname not in self.env.found_docs:
                     if excluded(self.env.doc2path(docname, None)):
                         msg = __('autosummary references excluded document %r. Ignored.')
